@@ -11,7 +11,7 @@ export async function GET() {
 				status: 401,
 			});
 		}
-
+		
 		// Get user profile
 		const userProfile = await prisma.userProfile.findUnique({
 			where: { clerkId: userId },

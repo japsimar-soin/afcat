@@ -1,9 +1,11 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 export const runtime = "nodejs";
 
-export default clerkMiddleware(() => {
-	// No-op: protection handled at component level with <Protect />
+const isProtectedRoute = createRouteMatcher(["/dashboard(.*)", "/mock(.*)", "/practice(.*)", "/my-attempts(.*)"]);
+
+export default clerkMiddleware(async (auth, req) => {
+	if (isProtectedRoute(req)) await auth.protect();
 });
 
 export const config = {

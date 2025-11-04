@@ -4,48 +4,8 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Protect } from "@clerk/nextjs";
 import Image from "next/image";
+import { Attempt } from "@/types/Attempt";
 
-interface AIFeedback {
-	score_overall: number;
-	strengths: string[];
-	weaknesses: string[];
-	personality_traits: {
-		leadership: number;
-		creativity: number;
-		analytical_thinking: number;
-		emotional_intelligence: number;
-		communication: number;
-	};
-	
-	suggested_rewrite: string;
-	explanation: string;
-	metadata: {
-		model: string;
-		prompt_version: string;
-		timestamp: string;
-	};
-}
-
-type Attempt = {
-	id: string;
-	mode: string;
-	status: string;
-	storyText?: string;
-	ocrText?: string;
-	score?: number;
-	feedbackJson?: AIFeedback;
-	timerSeconds: number;
-	createdAt: string;
-	image: {
-		storageKey: string;
-		mode: string;
-		source: string;
-	};
-	answerImage?: {
-		storageKey: string;
-		format: string;
-	};
-};
 
 export default function MyAttemptsPage() {
 	const [attempts, setAttempts] = useState<Attempt[]>([]);

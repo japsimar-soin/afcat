@@ -1,26 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
+import AttemptAnalysis from "@/interfaces/AttemptANalysis";
+import AttemptWithRelations from "@/interfaces/AttemptWithRelations";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-
-export interface AttemptAnalysis {
-	score_overall: number;
-	strengths: string[];
-	weaknesses: string[];
-	personality_traits: {
-		leadership: number;
-		creativity: number;
-		analytical_thinking: number;
-		emotional_intelligence: number;
-		communication: number;
-	};
-	suggested_rewrite: string;
-	explanation: string;
-	metadata: {
-		model: string;
-		prompt_version: string;
-		timestamp: string;
-	};
-}
 
 const ANALYSIS_PROMPT = `You are an expert SSB (Services Selection Board) evaluator analyzing practice responses for PPDT/TAT tests. 
 
@@ -69,16 +50,6 @@ Score ranges: 0-100 (0-40: Poor, 41-60: Below Average, 61-75: Average, 76-85: Go
 Personality traits: 1-10 scale (1-3: Low, 4-6: Average, 7-8: Good, 9-10: Excellent)
 
 Respond only with valid JSON.`;
-
-interface AttemptWithRelations {
-	id: string;
-	mode: string;
-	storyText: string | null;
-	ocrText: string | null;
-	image: { storageKey: string };
-	answerImage?: { storageKey: string } | null;
-	user: { clerkId: string };
-}
 
 export async function analyzeAttempt(
 	attempt: AttemptWithRelations

@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-// import { Navbar } from "@/components/navbar";
+import AIAnalysis from "@/interfaces/AIAnalysis";
+import Image from "next/image";
+import { PracticeMode } from "@/components/practice-mode";
 import { Timer } from "@/components/timer";
-// import { cn } from "@/lib/utils";
 import { Protect } from "@clerk/nextjs";
 import {
 	Upload,
@@ -22,29 +23,7 @@ import {
 	X,
 } from "lucide-react";
 
-type Mode = "ppdt" | "tat";
-
 type ApiImage = { id: string; storageKey: string };
-
-interface AIAnalysis {
-	score_overall: number;
-	strengths: string[];
-	weaknesses: string[];
-	personality_traits: {
-		leadership: number;
-		creativity: number;
-		analytical_thinking: number;
-		emotional_intelligence: number;
-		communication: number;
-	};
-	suggested_rewrite: string;
-	explanation: string;
-	metadata: {
-		model: string;
-		prompt_version: string;
-		timestamp: string;
-	};
-}
 
 type PracticeStep =
 	| "selection"
@@ -54,9 +33,7 @@ type PracticeStep =
 	| "analysis";
 
 export default function PracticeModePage() {
-	const params = useParams<{ mode: Mode }>();
 	const router = useRouter();
-	const mode = params?.mode as Mode;
 
 	// State management
 	const [currentStep, setCurrentStep] = useState<PracticeStep>("selection");
@@ -84,12 +61,6 @@ export default function PracticeModePage() {
 		useState<boolean>(false);
 	const [isTestTimerRunning, setIsTestTimerRunning] = useState<boolean>(false);
 
-	useEffect(() => {
-		if (mode !== "ppdt" && mode !== "tat") {
-			router.replace("/dashboard");
-		}
-	}, [mode, router]);
-
 	// Load attempted images
 	useEffect(() => {
 		async function loadAttemptedImages() {
@@ -114,7 +85,7 @@ export default function PracticeModePage() {
 	// Screen 1: Image Selection
 	const handleSelectExistingImage = async () => {
 		try {
-			const upperMode = mode.toUpperCase() as "PPDT" | "TAT";
+			const upperMode = "PPDT";
 			const res = await fetch(`/api/images?mode=${upperMode}&public=true`);
 			if (!res.ok) return;
 
@@ -144,7 +115,7 @@ export default function PracticeModePage() {
 	const handleGenerateAIImage = async () => {
 		try {
 			setIsAiProcessing(true);
-			const upperMode = mode.toUpperCase() as "PPDT" | "TAT";
+			const upperMode = "PPDT";
 
 			// Generate AI image
 			const res = await fetch("/api/images/generate", {
@@ -153,7 +124,7 @@ export default function PracticeModePage() {
 				body: JSON.stringify({
 					mode: upperMode,
 					//BUG - CHANGE THE PROMPT
-					prompt: `Professional ${mode.toUpperCase()} test image for military selection`,
+					prompt: `Professional ${upperMode} test image for military selection`,
 				}),
 			});
 
@@ -230,7 +201,7 @@ export default function PracticeModePage() {
 		let currentAttemptId = attemptId;
 		if (!currentAttemptId) {
 			try {
-				const upperMode = mode.toUpperCase() as "PPDT" | "TAT";
+				const upperMode = "PPDT";
 				const res = await fetch(`/api/attempts`, {
 					method: "POST",
 					headers: { "content-type": "application/json" },
@@ -259,7 +230,7 @@ export default function PracticeModePage() {
 		const reader = new FileReader();
 		reader.onload = async (e) => {
 			const base64Data = e.target?.result as string;
-			const upperMode = mode.toUpperCase() as "PPDT" | "TAT";
+			const upperMode = "PPDT";
 
 			try {
 				const res = await fetch("/api/images/upload", {
@@ -333,7 +304,7 @@ export default function PracticeModePage() {
 
 			// If we don't have an attempt yet, create one
 			if (!currentAttemptId) {
-				const upperMode = mode.toUpperCase() as "PPDT" | "TAT";
+				const upperMode = "PPDT";
 				const res = await fetch(`/api/attempts`, {
 					method: "POST",
 					headers: { "content-type": "application/json" },
@@ -433,7 +404,7 @@ export default function PracticeModePage() {
 			<div className="container mx-auto px-4 py-8">
 				<div className="text-center mb-8">
 					<h1 className="text-4xl font-bold text-gray-900 mb-4">
-						{mode.toUpperCase()} Practice
+						PPDT Practice
 					</h1>
 					<p className="text-lg text-gray-600">
 						Choose your practice mode to begin
@@ -500,15 +471,14 @@ export default function PracticeModePage() {
 				<div className="max-w-3xl mx-auto">
 					<div className="text-center mb-8">
 						<h1 className="text-4xl font-bold text-gray-900 mb-4">
-							{mode.toUpperCase()} Instructions
+							{"PPDT"} Instructions
 						</h1>
 						<div className="bg-white rounded-lg p-6 shadow-lg">
 							<h2 className="text-2xl font-semibold mb-4">Test Overview</h2>
 							<div className="text-left space-y-4">
 								<p className="text-gray-700">
-									<strong>{mode.toUpperCase()}</strong> (Picture Perception and
-									Description Test / Thematic Apperception Test) is designed to
-									assess your:
+									<strong>{"PPDT"}</strong> (Picture Perception and Description
+									Test / Thematic Apperception Test) is designed to assess your:
 								</p>
 								<ul className="list-disc list-inside space-y-2 text-gray-700">
 									<li>Perception and observation skills</li>
@@ -524,7 +494,7 @@ export default function PracticeModePage() {
 									<ol className="list-decimal list-inside space-y-1 text-blue-800">
 										<li>You will see an image for exactly 30 seconds</li>
 										<li>
-											After 30 seconds, you'll have 4 minutes to write your
+											After 30 seconds, you will have 4 minutes to write your
 											response
 										</li>
 										<li>Upload a picture of your written answer</li>
@@ -566,14 +536,15 @@ export default function PracticeModePage() {
 				<div className="text-center">
 					{selectedImage && (
 						<div className="relative w-full h-screen">
-							<img
+							<Image
 								src={
 									selectedImage.storageKey.startsWith("/")
 										? selectedImage.storageKey
 										: `/uploads/${selectedImage.storageKey}`
 								}
-								alt={`${mode} test image`}
-								className="w-full h-full object-contain"
+								alt={`PPDT test image`}
+								fill
+								className="object-contain"
 								onError={(e) => {
 									console.error("Image load error:", selectedImage.storageKey);
 									console.error("Error details:", e);
@@ -584,6 +555,7 @@ export default function PracticeModePage() {
 										selectedImage.storageKey
 									);
 								}}
+								unoptimized
 							/>
 							{/* Debug info */}
 							<div className="absolute bottom-4 left-4 text-white text-sm bg-black bg-opacity-50 p-2 rounded">
@@ -776,7 +748,7 @@ export default function PracticeModePage() {
 							AI Analysis Results
 						</h1>
 						<p className="text-lg text-gray-600">
-							Detailed feedback on your {mode.toUpperCase()} performance
+							Detailed feedback on your {"PPDT"} performance
 						</p>
 					</div>
 
@@ -935,13 +907,17 @@ export default function PracticeModePage() {
 	);
 
 	return (
+
 		<Protect>
-			{currentStep === "selection" && renderImageSelection()}
-			{currentStep === "instructions" && renderInstructions()}
-			{currentStep === "test" && renderTestPage()}
-			{currentStep === "submit" && renderSubmitAnswer()}
-			{currentStep === "analysis" && renderAnalysis()}
-			{showOcrDialog && renderOcrDialog()}
+			<PracticeMode></PracticeMode>
 		</Protect>
+		// <Protect>
+		// 	{currentStep === "selection" && renderImageSelection()}
+		// 	{currentStep === "instructions" && renderInstructions()}
+		// 	{currentStep === "test" && renderTestPage()}
+		// 	{currentStep === "submit" && renderSubmitAnswer()}
+		// 	{currentStep === "analysis" && renderAnalysis()}
+		// 	{showOcrDialog && renderOcrDialog()}
+		// </Protect>
 	);
 }
