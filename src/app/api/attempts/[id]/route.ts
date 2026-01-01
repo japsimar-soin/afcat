@@ -32,6 +32,7 @@ export async function GET(
 			where: { clerkId: userId },
 		});
 
+  // Return error if user is not present
 		if (!userProfile) {
 			return new Response(JSON.stringify({ error: "User profile not found" }), {
 				status: 404,
