@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -59,7 +60,6 @@ export default function PracticeModePage() {
 		useState<boolean>(false);
 	const [isTestTimerRunning, setIsTestTimerRunning] = useState<boolean>(false);
 
-	// Load attempted images
 	useEffect(() => {
 		async function loadAttemptedImages() {
 			try {
@@ -555,7 +555,7 @@ export default function PracticeModePage() {
 								}}
 								unoptimized
 							/>
-							{/* Debug info */}
+							
 							<div className="absolute bottom-4 left-4 text-white text-sm bg-black bg-opacity-50 p-2 rounded">
 								Image: {selectedImage.storageKey}
 							</div>

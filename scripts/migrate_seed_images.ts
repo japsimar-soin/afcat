@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { readFile, readdir } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { storage } from '../src/lib/storage';
 
