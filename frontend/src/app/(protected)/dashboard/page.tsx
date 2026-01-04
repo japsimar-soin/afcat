@@ -20,16 +20,19 @@ export default function DashboardPage() {
 						content={
 							"Practice Picture Perception and Discussion Test with random images"
 						}
+						href="/practice"
 					/>
 					<DashboardCard
 						title={"PPDT Mock"}
 						content={
 							"Mock Picture Perception and Discussion Test with random images"
 						}
+						href="/mock"
 					/>
 					<DashboardCard
 						title={"My Attempts"}
 						content={"View and review all your practice attempts"}
+						href="/my-attempts"
 					/>
 				</div>
 			</main>

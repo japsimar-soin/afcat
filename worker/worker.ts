@@ -5,9 +5,9 @@ import { Queue, Worker, Job } from "bullmq";
 import { ImageAnnotatorClient } from "@google-cloud/vision";
 import { PrismaClient } from "@prisma/client";
 import sharp from "sharp";
-import { storage } from "../src/lib/storage";
-import { analyzeAttempt } from "../src/lib/ai/gemini";
-import { generateImage } from "../src/lib/image-generation/replicate";
+import { storage } from "../frontend/src/lib/storage";
+import { analyzeAttempt } from "../frontend/src/lib/ai/gemini";
+import { generateImage } from "../frontend/src/lib/image-generation/replicate";
 
 const prisma = new PrismaClient();
 
@@ -255,15 +255,15 @@ const imageGenerationWorker = new Worker(
 );
 
 // Error handling
-ocrWorker.on("error", (error) => {
+ocrWorker.on("error", (error: Error) => {
 	console.error("OCR Worker error:", error);
 });
 
-aiAnalysisWorker.on("error", (error) => {
+aiAnalysisWorker.on("error", (error: Error) => {
 	console.error("AI Analysis Worker error:", error);
 });
 
-imageGenerationWorker.on("error", (error) => {
+imageGenerationWorker.on("error", (error: Error) => {
 	console.error("Image Generation Worker error:", error);
 });
 

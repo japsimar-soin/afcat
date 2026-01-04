@@ -1,0 +1,18 @@
+{
+	"extends": "../frontend/tsconfig.json",
+	"compilerOptions": {
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"baseUrl": "..",
+		"paths": {
+			"@prisma/client": ["frontend/node_modules/@prisma/client"],
+			"@/*": ["frontend/src/*"],
+			"bullmq": ["frontend/node_modules/bullmq"],
+			"@google-cloud/vision": ["frontend/node_modules/@google-cloud/vision"]
+		},
+		"typeRoots": ["../frontend/node_modules/@types", "../node_modules/@types"],
+		"skipLibCheck": true
+	},
+	"include": ["**/*.ts"],
+	"exclude": ["node_modules"]
+}

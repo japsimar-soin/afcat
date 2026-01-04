@@ -7,11 +7,11 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint",
-		"prisma:generate": "prisma generate",
-		"prisma:migrate": "prisma migrate dev",
-		"prisma:seed": "prisma db seed",
+		"prisma:generate": "cd ../backend/prisma && prisma generate",
+		"prisma:migrate": "cd ../backend/prisma && prisma migrate dev",
+		"prisma:seed": "cd ../backend/prisma && tsx seed.ts",
 		"worker": "tsx worker/worker.ts",
-		"migrate-images": "tsx scripts/migrate_seed_images.ts"
+		"migrate-images": "tsx ../scripts/migrate_seed_images.ts"
 	},
 	"dependencies": {
 		"@clerk/nextjs": "^6.31.3",
@@ -65,6 +65,6 @@
 		"css": "src/app/globals.css"
 	},
 	"prisma": {
-		"seed": "tsx prisma/seed.ts"
+		"seed": "tsx ../backend/prisma/seed.ts"
 	}
 }

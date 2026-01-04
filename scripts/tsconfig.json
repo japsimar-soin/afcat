@@ -1,0 +1,15 @@
+{
+	"extends": "../frontend/tsconfig.json",
+	"compilerOptions": {
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"baseUrl": "..",
+		"paths": {
+			"@prisma/client": ["frontend/node_modules/@prisma/client"],
+			"@/*": ["frontend/src/*"]
+		},
+		"typeRoots": ["../frontend/node_modules/@types", "../node_modules/@types"]
+	},
+	"include": ["**/*.ts"],
+	"exclude": ["node_modules"]
+}
