@@ -12,6 +12,8 @@ export function PracticeMode() {
 			<div>
         <UserInput></UserInput>
       </div>
+
+			
 		</div>
 	);
 }
